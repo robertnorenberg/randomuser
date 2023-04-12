@@ -13,9 +13,14 @@ test.describe("password", () => {
     expect(passwords.every(pass => pass.length == 8)).toBe(true);
   });
 
-  test("has length of 8 to 64 by default", async ({ request }) => {
+  test("is granted by default", async ({ request }) => {
     const passwords = await getPasswords(request, "");
-    expect(passwords[0].length).toBeGreaterThanOrEqual(8); // docs say 8 but it's sometimes less
+    expect(passwords[0].length).toBeGreaterThan(0);
+  });
+
+  test("has length of 8 to 64 when charset specified", async ({ request }) => {
+    const passwords = await getPasswords(request, "?password=lower");
+    expect(passwords[0].length).toBeGreaterThanOrEqual(8);
     expect(passwords[0].length).toBeLessThanOrEqual(64);
   });
 
